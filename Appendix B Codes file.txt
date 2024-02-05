@@ -1,0 +1,171 @@
+Appendix B explains the procedure of feature extraction and fuzzy logic inference model function. Parameters of faulty modules are extracted using a percentage reduction algorithm; the following algorithm explains the function of faulty module feature extraction of HS faulty module. 
+Percentage reduction algorithm
+
+%STR is sensor tolerance rate which is 1.5 percent
+STR=1.5;
+%FaultFree (ff) Power Voltage and Current
+Pff=max(p);
+Vff=max(v);
+Iff=max(c);
+%OneHotspot (1hs) Power,Voltage and Current
+P1hs=max(p1hs);
+V1hs=max(v1hs);
+I1hs=max(c1hs);
+%TwoHS (2hs) Power,Voltage and Current
+P2hs=max(p2hs);
+V2hs=max(v2hs);
+I2hs=max(c2hs);
+%ThreeHS (3hs) Power,Voltage and Current
+P3hs=max(p3hs);
+V3hs=max(v3hs);
+I3hs=max(c3hs);
+%FourHS (4hs) Power,Voltage and Current
+P4hs=max(p4hs);
+V4hs=max(v4hs);
+I4hs=max(c4hs);
+%Percentage Power and voltage reduction one HS (min)
+PPR1=100-(P1hs/Pff)*100;
+PVR1=100-(V1hs/Vff)*100;
+PIR1=100-(I1hs/Iff)*100;
+%Percentage Power and voltage reduction One HS(max)
+PPR1max=PPR1*STR;
+PVR1max=PVR1*STR;
+PIR1max=PIR1*STR;
+%Percentage Power and voltage reduction two HS (min)
+PPR2=100-(P2hs/Pff)*100;
+PVR2=100-(V2hs/Vff)*100;
+PIR2=100-(I2hs/Iff)*100;
+%Percentage Power and voltage reduction two HS(max)
+PPR2max=PPR2*STR;
+PVR2max=PVR2*STR;
+PIR2max=PIR2*STR;
+%Percentage Power and voltage reduction three HS (min)
+PPR3=100-(P3hs/Pff)*100;
+PVR3=100-(V3hs/Vff)*100;
+PIR3=100-(I3hs/Iff)*100;
+%Percentage Power and voltage reduction three HS(max)
+PPR3max=PPR3*STR;
+PVR3max=PVR3*STR;
+PIR3max=PIR3*STR;
+%Percentage Power and voltage reduction four HS (min)
+PPR4=100-(P4hs/Pff)*100;
+PVR4=100-(V4hs/Vff)*100;
+PIR4=100-(I4hs/Iff)*100;
+%Percentage Power and voltage reduction four HS(max)
+PPR4max=PPR4*STR;
+PVR4max=PVR4*STR;
+PIR4max=PIR4*STR;
+The same function is used for shading faults to extract the threshold min-max power, open-circuit voltage, and short circuit current reductions. 
+Mamdani-Type Fuzzy Inference Model
+Mamdani type inference model is used to classify different faults by if-then statements (rules), the following function explains the classification procedure. Figures 
+% Mamdani-type fuzzy inference model
+[System]
+Name='final_fuzzy'
+Type='mamdani'
+Version=2.0
+NumInputs=3
+NumOutputs=1
+NumRules=24
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+% Percentage power reduction ratios of shading and HS faults (First Input Membership Function) 
+[Input1]
+Name='PP_R'
+Range=[0 100]
+NumMFs=12
+MF1='F1':'trimf',[5.24 6.55 7.86]
+MF2='F2':'trimf',[13.92 17.4 20.88]
+MF3='F3':'trimf',[23.36 29.2 35.04]
+MF4='F4':'trimf',[54.68 68.35 82.02]
+MF5='F5':'trimf',[15.02 18.775 22.53]
+MF6='F6':'trimf',[19.43 24.285 29.14]
+MF7='F7':'trimf',[31.35 39.185 47.02]
+MF8='F8':'trimf',[40.75 50.935 61.12]
+MF9='F9':'trimf',[36.68 45.85 55.02]
+MF10='F10':'trimf',[42.5 53.125 63.75]
+MF11='F12':'trimf',[65.64 82.055 98.47]
+MF12='F11':'trimf',[48.83 61.04 73.25]
+
+
+% Percentage open circuit voltage reduction ratios of shading and HS faults (Second Input Membership Function)
+[Input2]
+Name='Voc_R'
+Range=[0 50]
+NumMFs=12
+MF1='F1':'trimf',[0.13 0.165 0.2]
+MF2='F2':'trimf',[0.37 0.47 0.57]
+MF3='F3':'trimf',[0.5 0.625 0.75]
+MF4='F4':'trimf',[1.26 1.575 1.89]
+MF5='F5':'trimf',[6.61 8.265 9.92]
+MF6='F6':'trimf',[9.52 11.905 14.29]
+MF7='F7':'trimf',[17.48 21.855 26.23]
+MF8='F8':'trimf',[24.1 30.125 36.15]
+MF9='F9':'trimf',[18.27 22.84 27.41]
+MF10='F10':'trimf',[19.17 23.96 28.75]
+MF11='F11':'trimf',[20.06 25.08 30.1]
+MF12='F12':'trimf',[24.32 30.405 36.49]
+
+
+% Percentage short circuit current reduction ratios of shading and HS faults (Third Input Membership Function)
+[Input3]
+Name='Isc_R'
+Range=[0 95]
+NumMFs=12
+MF1='F1':'trimf',[10.08 12.6 15.12]
+MF2='F2':'trimf',[19.81 24.765 29.72]
+MF3='F3':'trimf',[30.27 37.84 45.41]
+MF4='F4':'trimf',[59.44 74.3 89.16]
+MF5='F5':'trimf',[2.53 3.16 3.79]
+MF6='F6':'trimf',[2.53 3.16 3.79]
+MF7='F7':'trimf',[2.53 3.16 3.79]
+MF8='F8':'trimf',[2.53 3.16 3.79]
+MF9='F9':'trimf',[12.29 15.365 18.44]
+MF10='F10':'trimf',[21.92 27.4 32.88]
+MF11='F11':'trimf',[31.68 39.6 47.52]
+MF12='F12':'trimf',[60.96 76.2 91.44]
+
+
+% Output Membership function to classify 12 different types of PV shading and HS faults
+[Output1]
+Name='output1'
+Range=[0 12]
+NumMFs=12
+MF1='LS':'trimf',[0 0.5001 0.9994]
+MF2='MS':'trimf',[0.9994 1.5 2.001]
+MF3='PS':'trimf',[2.001 2.499 3]
+MF4='FS':'trimf',[3 3.501 3.999]
+MF5='US-HS1':'trimf',[3.999 4.5 5.001]
+MF6='US-HS2':'trimf',[5.001 5.499 6]
+MF7='US-HS3':'trimf',[6 6.501 6.999]
+MF8='US-HS4':'trimf',[6.999 7.5 8.001]
+MF9='S-HS1':'trimf',[8.001 8.499 9]
+MF10='S-HS2':'trimf',[9 9.497 9.994]
+MF11='S-HS3':'trimf',[9.994 10.51 11.01]
+MF12='S-HS4':'trimf',[11.01 11.5 12]
+
+
+"Confusion Matrix and F1_Score"
+%CALCULATION OF F1 SCORE 
+%CALCULATING A CONFUSION MATRIX FROM THE AVAILABLE DATA SET
+[cm, order] = confusionmat(TARGET,PREDICT)
+%TRANSPOSE TO GET THE DIAGNONAL
+cmt=cm'
+diagonal=diag(cmt)
+%SUM OF ROWS TO CALCULATE PRECISION
+sum_of_rows = sum(cmt,2)
+%PRECISION
+precision = diagonal ./ sum_of_rows
+%OVER ALL PRESICION TO CALCULATE F1_SCORE
+overall_precision = mean (precision)
+%SUM OF COLOUMNS TO CALCULATE RECALL
+sum_of_coloumns = sum (cmt, 1)
+%RECALL
+recall = diagonal ./ sum_of_coloumns'
+%OVERALL RECALL TO CALCULATE F1_SCORE
+overall_recall = mean (recall)
+%F1_SCORE
+F1_score = 2*(overall_precision * overall_recall)/(overall_precision + overall_recall)
